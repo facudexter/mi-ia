@@ -1,38 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Mi IA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      overflow: hidden;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Asistente IA</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>¡Bienvenido!</h1>
+        <p>Haz clic en el chat para comenzar a conversar</p>
+    </div>
 
-  <iframe
-    src="https://www.chatbase.co/chatbot-iframe/MeRf4eoeo6KhiQbRx41EO"
-    allow="clipboard-write; microphone"
-  ></iframe>
-
+    <!-- Chatbase Embed -->
+    <script>
+        window.embeddedChatbotConfig = {
+            chatbotId: "MeRf4eoeo6KhiQbRx41EO",
+            domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="MeRf4eoeo6KhiQbRx41EO"
+        domain="www.chatbase.co"
+        defer>
+    </script>
 </body>
 </html>
