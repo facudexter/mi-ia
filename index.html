@@ -5,24 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Dexter - Asistente IA</title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        body, html {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
+        .container {
+            text-align: center;
+            color: white;
+            padding: 20px;
         }
-        iframe {
-            width: 100%;
-            height: 100vh;
-            border: none;
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.5em;
         }
     </style>
 </head>
 <body>
-    <iframe src="https://www.chatbase.co/chatbot/MeRf4eoeo6KhiQbRx41EO" frameborder="0" allowfullscreen></iframe>
+    <div class="container">
+        <h1>🤖 AI Dexter</h1>
+        <p>Haz clic en el botón flotante abajo a la derecha para chatear</p>
+    </div>
+
+    <script>
+        window.embeddedChatbotConfig = {
+            chatbotId: "MeRf4eoeo6KhiQbRx41EO",
+            domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="MeRf4eoeo6KhiQbRx41EO"
+        domain="www.chatbase.co"
+        defer>
+    </script>
 </body>
 </html>
