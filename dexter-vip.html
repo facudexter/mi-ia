@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🤖 AI Dexter - Asistente Gaming Premium</title>
+  <title>🤖 AI Dexter VIP - Acceso Ilimitado</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -875,8 +875,8 @@
 
   <!-- Message Counter -->
   <div class="message-counter" id="messageCounter">
-    <div class="counter-label">💬 Mensajes restantes</div>
-    <div class="counter-value" id="counterValue">15</div>
+    <div class="counter-label">💎 Acceso VIP</div>
+    <div class="counter-value" id="counterValue">∞</div>
   </div>
 
   <!-- Payment Modal -->
@@ -1164,117 +1164,63 @@
 
   <!-- Main JavaScript Controller -->
   <script>
-    // Message tracking system
+    // Message tracking system - VIP VERSION (UNLIMITED)
     const MESSAGE_CONTROLLER = {
-      STORAGE_KEY: 'dexter_messages',
-      FREE_MESSAGES: 15,
-      WARNING_THRESHOLD: 10,
+      STORAGE_KEY: 'dexter_messages_vip',
+      FREE_MESSAGES: 999999,
+      WARNING_THRESHOLD: 999999,
       
       getMessagesData() {
-        const data = localStorage.getItem(this.STORAGE_KEY);
-        if (!data) {
-          return {
-            remaining: this.FREE_MESSAGES,
-            unlimited: false,
-            lastReset: Date.now()
-          };
-        }
-        return JSON.parse(data);
+        return {
+          remaining: 999999,
+          unlimited: true,
+          lastReset: Date.now()
+        };
       },
       
       saveMessagesData(data) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+        // VIP version doesn't save limits
       },
       
       getRemainingMessages() {
-        return this.getMessagesData().remaining;
+        return 999999;
       },
       
       hasUnlimited() {
-        return this.getMessagesData().unlimited === true;
+        return true;
       },
       
       useMessage() {
-        const data = this.getMessagesData();
-        if (data.unlimited) return true;
-        if (data.remaining <= 0) return false;
-        
-        data.remaining--;
-        this.saveMessagesData(data);
-        this.updateCounter();
-        
-        if (data.remaining === 0) {
-          this.blockChat();
-        }
-        
+        // VIP always returns true
         return true;
       },
       
       addMessages(count) {
-        const data = this.getMessagesData();
-        data.remaining += count;
-        this.saveMessagesData(data);
-        this.updateCounter();
-        this.unblockChat();
+        // VIP doesn't need to add messages
       },
       
       setUnlimited() {
-        const data = this.getMessagesData();
-        data.unlimited = true;
-        this.saveMessagesData(data);
-        this.updateCounter();
-        this.unblockChat();
+        // Already unlimited
       },
       
       updateCounter() {
-        const data = this.getMessagesData();
         const counter = document.getElementById('messageCounter');
         const value = document.getElementById('counterValue');
-        
-        if (data.unlimited) {
-          value.textContent = '∞';
-          counter.classList.remove('warning', 'danger');
-          return;
-        }
-        
-        value.textContent = data.remaining;
-        
-        // Update styling based on remaining messages
+        value.textContent = '∞';
         counter.classList.remove('warning', 'danger');
-        value.classList.remove('warning', 'danger');
-        
-        if (data.remaining <= 0) {
-          counter.classList.add('danger');
-          value.classList.add('danger');
-        } else if (data.remaining <= this.WARNING_THRESHOLD) {
-          counter.classList.add('warning');
-          value.classList.add('warning');
-        }
       },
       
       blockChat() {
-        const wrapper = document.getElementById('chatbase-wrapper');
-        if (wrapper) {
-          wrapper.classList.add('blocked');
-        }
-        setTimeout(() => {
-          openPaymentModal();
-        }, 500);
+        // VIP never blocks chat
       },
       
       unblockChat() {
-        const wrapper = document.getElementById('chatbase-wrapper');
-        if (wrapper) {
-          wrapper.classList.remove('blocked');
-        }
+        // VIP chat is always unblocked
       },
       
       init() {
         this.updateCounter();
-        const data = this.getMessagesData();
-        if (data.remaining <= 0 && !data.unlimited) {
-          this.blockChat();
-        }
+        // Never show payment modal for VIP
       }
     };
 

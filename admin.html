@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 AI Dexter - Panel Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-purple: #6B2DD9;
+      --dark-purple: #4A1B8F;
+      --light-purple: #9D5FFF;
+      --neon-purple: #B794F4;
+      --black: #0A0A0F;
+      --dark-gray: #1A1A24;
+      --white: #FFFFFF;
+      --light-gray: #E2E8F0;
+      --success-green: #00FF88;
+      --danger-red: #FF4444;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 50%, var(--dark-purple) 100%);
+      color: var(--white);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding: 40px 20px;
+      background: rgba(26, 26, 36, 0.8);
+      border: 2px solid var(--primary-purple);
+      border-radius: 20px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--light-purple) 0%, var(--white) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--light-gray);
+      font-size: 1.1rem;
+    }
+
+    .login-section {
+      max-width: 500px;
+      margin: 100px auto;
+      background: rgba(26, 26, 36, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--primary-purple);
+      border-radius: 20px;
+      padding: 40px;
+    }
+
+    .login-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--neon-purple);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--light-gray);
+      font-size: 0.9rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 15px;
+      background: rgba(10, 10, 15, 0.8);
+      border: 2px solid var(--primary-purple);
+      border-radius: 10px;
+      color: var(--white);
+      font-size: 1rem;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--light-purple);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary-purple) 0%, var(--dark-purple) 100%);
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      box-shadow: 0 5px 20px rgba(107, 45, 217, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(107, 45, 217, 0.6);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success-green) 0%, #00CC6A 100%);
+      color: var(--black);
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 8px 25px rgba(0, 255, 136, 0.6);
+    }
+
+    .admin-content {
+      display: none;
+    }
+
+    .admin-content.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(26, 26, 36, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--primary-purple);
+      border-radius: 20px;
+      padding: 30px;
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--neon-purple);
+    }
+
+    .stat-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      color: var(--light-gray);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .generator-section {
+      margin-top: 30px;
+    }
+
+    .plan-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .plan-option {
+      padding: 20px;
+      background: rgba(107, 45, 217, 0.1);
+      border: 2px solid var(--primary-purple);
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .plan-option:hover {
+      border-color: var(--light-purple);
+      background: rgba(107, 45, 217, 0.2);
+    }
+
+    .plan-option.selected {
+      background: rgba(107, 45, 217, 0.3);
+      border-color: var(--neon-purple);
+      box-shadow: 0 5px 20px rgba(107, 45, 217, 0.4);
+    }
+
+    .plan-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--white);
+      margin-bottom: 5px;
+    }
+
+    .plan-details {
+      color: var(--light-gray);
+      font-size: 0.9rem;
+    }
+
+    .generated-code {
+      background: rgba(10, 10, 15, 0.8);
+      border: 2px solid var(--success-green);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .code-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--success-green);
+      letter-spacing: 3px;
+      margin: 15px 0;
+    }
+
+    .codes-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .codes-table th {
+      background: rgba(107, 45, 217, 0.3);
+      padding: 15px;
+      text-align: left;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--neon-purple);
+      border-bottom: 2px solid var(--primary-purple);
+    }
+
+    .codes-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(107, 45, 217, 0.2);
+      color: var(--light-gray);
+    }
+
+    .codes-table tr:hover {
+      background: rgba(107, 45, 217, 0.1);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-active {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--success-green);
+      border: 1px solid var(--success-green);
+    }
+
+    .status-used {
+      background: rgba(255, 68, 68, 0.2);
+      color: var(--danger-red);
+      border: 1px solid var(--danger-red);
+    }
+
+    .copy-btn {
+      background: var(--primary-purple);
+      color: var(--white);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--light-purple);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(26, 26, 36, 0.95);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--primary-purple);
+      border-radius: 12px;
+      padding: 20px 25px;
+      color: var(--white);
+      z-index: 10000;
+      box-shadow: 0 10px 30px rgba(107, 45, 217, 0.6);
+      animation: slideIn 0.5s ease;
+    }
+
+    .toast.success {
+      border-color: var(--success-green);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-selector {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Section -->
+    <div class="login-section" id="loginSection">
+      <h2 class="login-title">🔐 Acceso Admin</h2>
+      <div class="input-group">
+        <label class="input-label">Contraseña:</label>
+        <input 
+          type="password" 
+          id="passwordInput" 
+          class="input-field" 
+          placeholder="Ingresá la contraseña"
+          onkeypress="if(event.key==='Enter') login()"
+        >
+      </div>
+      <button class="btn" onclick="login()">🚀 Ingresar</button>
+      <p style="text-align: center; color: var(--light-gray); font-size: 0.85rem; margin-top: 20px;">
+        Contraseña por defecto: <strong>dexter2026</strong>
+      </p>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="admin-content" id="adminContent">
+      <div class="header">
+        <h1>🤖 Panel Admin - AI Dexter</h1>
+        <p class="subtitle">Generación y gestión de códigos de activación</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">📊 Estadísticas</div>
+          <div class="stat-number" id="totalCodes">0</div>
+          <div class="stat-label">Códigos Generados</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">✅ Códigos Activos</div>
+          <div class="stat-number" id="activeCodes">0</div>
+          <div class="stat-label">Disponibles</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🎟️ Códigos Usados</div>
+          <div class="stat-number" id="usedCodes">0</div>
+          <div class="stat-label">Canjeados</div>
+        </div>
+      </div>
+
+      <!-- Code Generator -->
+      <div class="card generator-section">
+        <div class="card-title">🎲 Generar Nuevo Código</div>
+        
+        <div class="plan-selector">
+          <div class="plan-option" onclick="selectPlan('35')" data-plan="35">
+            <div class="plan-name">35 mensajes</div>
+            <div class="plan-details">$2.99 USD</div>
+          </div>
+
+          <div class="plan-option" onclick="selectPlan('105')" data-plan="105">
+            <div class="plan-name">105 mensajes</div>
+            <div class="plan-details">$6.99 USD</div>
+          </div>
+
+          <div class="plan-option" onclick="selectPlan('230')" data-plan="230">
+            <div class="plan-name">230 mensajes</div>
+            <div class="plan-details">$12 USD</div>
+          </div>
+
+          <div class="plan-option" onclick="selectPlan('unlimited')" data-plan="unlimited">
+            <div class="plan-name">∞ Ilimitados</div>
+            <div class="plan-details">$20 USD</div>
+          </div>
+        </div>
+
+        <button class="btn btn-success" onclick="generateCode()">
+          ✨ GENERAR CÓDIGO
+        </button>
+
+        <div id="generatedCodeDisplay"></div>
+      </div>
+
+      <!-- Codes List -->
+      <div class="card">
+        <div class="card-title">📋 Códigos Generados</div>
+        <table class="codes-table" id="codesTable">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Plan</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="codesTableBody">
+            <!-- Codes will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = 'dexter2026'; // Cambiar esto por seguridad
+    let selectedPlanValue = null;
+    let codes = [];
+
+    // Load codes from localStorage
+    function loadCodes() {
+      const stored = localStorage.getItem('admin_codes');
+      if (stored) {
+        codes = JSON.parse(stored);
+      }
+      updateStats();
+      renderCodesTable();
+    }
+
+    // Save codes to localStorage
+    function saveCodes() {
+      localStorage.setItem('admin_codes', JSON.stringify(codes));
+    }
+
+    // Login
+    function login() {
+      const password = document.getElementById('passwordInput').value;
+      if (password === ADMIN_PASSWORD) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminContent').classList.add('active');
+        loadCodes();
+      } else {
+        showToast('❌ Contraseña incorrecta', 'error');
+      }
+    }
+
+    // Select plan
+    function selectPlan(plan) {
+      document.querySelectorAll('.plan-option').forEach(el => {
+        el.classList.remove('selected');
+      });
+      document.querySelector(`[data-plan="${plan}"]`).classList.add('selected');
+      selectedPlanValue = plan;
+    }
+
+    // Generate random code
+    function generateRandomCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = 'DEXTER-';
+      for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
+    // Generate code
+    function generateCode() {
+      if (!selectedPlanValue) {
+        showToast('❌ Seleccioná un plan primero', 'error');
+        return;
+      }
+
+      const code = generateRandomCode();
+      const newCode = {
+        code: code,
+        plan: selectedPlanValue,
+        messages: selectedPlanValue === 'unlimited' ? '∞' : parseInt(selectedPlanValue),
+        createdAt: new Date().toISOString(),
+        used: false,
+        usedAt: null
+      };
+
+      codes.push(newCode);
+      saveCodes();
+      updateStats();
+      renderCodesTable();
+
+      // Display generated code
+      const display = document.getElementById('generatedCodeDisplay');
+      display.innerHTML = `
+        <div class="generated-code">
+          <div style="color: var(--success-green); font-size: 1.1rem; margin-bottom: 10px;">
+            ✅ Código generado exitosamente
+          </div>
+          <div class="code-value">${code}</div>
+          <div style="color: var(--light-gray); margin-bottom: 15px;">
+            Plan: ${selectedPlanValue === 'unlimited' ? 'Mensajes Ilimitados' : selectedPlanValue + ' mensajes'}
+          </div>
+          <button class="btn" onclick="copyCode('${code}')">
+            📋 Copiar Código
+          </button>
+        </div>
+      `;
+
+      showToast('✅ Código generado correctamente', 'success');
+    }
+
+    // Update stats
+    function updateStats() {
+      const total = codes.length;
+      const used = codes.filter(c => c.used).length;
+      const active = total - used;
+
+      document.getElementById('totalCodes').textContent = total;
+      document.getElementById('activeCodes').textContent = active;
+      document.getElementById('usedCodes').textContent = used;
+    }
+
+    // Render codes table
+    function renderCodesTable() {
+      const tbody = document.getElementById('codesTableBody');
+      tbody.innerHTML = '';
+
+      codes.slice().reverse().forEach(code => {
+        const row = document.createElement('tr');
+        const date = new Date(code.createdAt).toLocaleDateString('es-AR');
+        
+        row.innerHTML = `
+          <td style="font-family: 'Orbitron', monospace; font-weight: 700;">${code.code}</td>
+          <td>${code.messages === '∞' ? 'Ilimitado' : code.messages + ' msg'}</td>
+          <td>${date}</td>
+          <td>
+            <span class="status-badge ${code.used ? 'status-used' : 'status-active'}">
+              ${code.used ? '✓ Usado' : '○ Activo'}
+            </span>
+          </td>
+          <td>
+            ${!code.used ? `<button class="copy-btn" onclick="copyCode('${code.code}')">📋 Copiar</button>` : '-'}
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Copy code to clipboard
+    function copyCode(code) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('✅ Código copiado al portapapeles', 'success');
+      });
+    }
+
+    // Show toast
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // Initialize
+    loadCodes();
+  </script>
+</body>
+</html>
