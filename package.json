@@ -1,9 +1,0 @@
-{
-  "name": "ai-dexter",
-  "version": "1.0.0",
-  "description": "AI Dexter - Sistema de pagos",
-  "dependencies": {},
-  "engines": {
-    "node": ">=14.x"
-  }
-}
