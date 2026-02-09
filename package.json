@@ -1,0 +1,10 @@
+{
+  "name": "ai-dexter",
+  "version": "1.0.0",
+  "description": "AI Dexter - Sistema de pagos y mensajes",
+  "main": "index.html",
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.x"
+  }
+}
