@@ -1,17 +1,13 @@
-// API para validar códigos de acceso permanente
+// API para validar y activar códigos de acceso permanente (UN SOLO USO)
 // Archivo: /api/activate-code.js
 
 const fs = require('fs');
 const path = require('path');
 
-const CODES_FILE = path.join(process.cwd(), 'data', 'codes.json');
+const CODES_FILE = path.join('/tmp', 'codes.json');
 
-// Asegurar directorio
-function ensureDataDir() {
-  const dataDir = path.join(process.cwd(), 'data');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
+// Asegurar archivo
+function ensureCodesFile() {
   if (!fs.existsSync(CODES_FILE)) {
     fs.writeFileSync(CODES_FILE, JSON.stringify([]));
   }
@@ -19,7 +15,7 @@ function ensureDataDir() {
 
 // Leer códigos
 function readCodes() {
-  ensureDataDir();
+  ensureCodesFile();
   try {
     const data = fs.readFileSync(CODES_FILE, 'utf8');
     return JSON.parse(data);
@@ -30,7 +26,7 @@ function readCodes() {
 
 // Guardar códigos
 function saveCodes(codes) {
-  ensureDataDir();
+  ensureCodesFile();
   fs.writeFileSync(CODES_FILE, JSON.stringify(codes, null, 2));
 }
 
@@ -46,7 +42,10 @@ module.exports = async (req, res) => {
   
   // Solo POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ 
+      success: false, 
+      error: 'Method not allowed' 
+    });
   }
 
   try {
@@ -63,6 +62,7 @@ module.exports = async (req, res) => {
     const codes = readCodes();
     const codeIndex = codes.findIndex(c => c.code === normalizedCode);
 
+    // Verificar si el código existe
     if (codeIndex === -1) {
       return res.status(404).json({ 
         success: false, 
@@ -72,6 +72,7 @@ module.exports = async (req, res) => {
 
     const foundCode = codes[codeIndex];
 
+    // Verificar si ya fue usado
     if (foundCode.used) {
       return res.status(400).json({ 
         success: false, 
@@ -79,7 +80,7 @@ module.exports = async (req, res) => {
       });
     }
 
-    // Marcar como usado
+    // ✅ Marcar como usado
     codes[codeIndex].used = true;
     codes[codeIndex].usedAt = new Date().toISOString();
     saveCodes(codes);
@@ -87,7 +88,7 @@ module.exports = async (req, res) => {
     // Responder éxito
     return res.status(200).json({
       success: true,
-      message: 'Acceso permanente activado correctamente'
+      message: '🎉 Acceso permanente activado correctamente'
     });
 
   } catch (error) {
@@ -98,4 +99,3 @@ module.exports = async (req, res) => {
     });
   }
 };
-
