@@ -966,7 +966,7 @@
 
         <div class="alert alert-info">
           <strong>📧 Después de pagar:</strong><br>
-          Enviá tu comprobante a: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b7d1d6d4c2d3d2cfc3d2c5868584f7d0dad6dedb99d4d8da">[email&#160;protected]</a></strong><br>
+          Enviá tu comprobante a: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89efe8eafcedecf1fdecfbb8bbbac9eee4e8e0e5a7eae6e4">[email&#160;protected]</a></strong><br>
           Te enviaremos tu código de activación único
         </div>
       </div>
@@ -1086,7 +1086,7 @@
     }
 
     // ==========================================
-    // ACTIVAR CÓDIGO (CON LOCALSTORAGE - UN SOLO USO)
+    // ACTIVAR CÓDIGO (SIMPLE Y FUNCIONAL)
     // ==========================================
     async function activateCode() {
       const input = document.getElementById('activationCode');
@@ -1097,15 +1097,20 @@
         return;
       }
 
+      showMessage('Verificando código...', 'info');
+
+      // Simular delay de red
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Validar formato: debe empezar con DEXTER- y tener al menos 8 caracteres después
       if (!code.startsWith('DEXTER-') || code.length < 15) {
         showMessage('❌ Formato de código inválido', 'error');
         return;
       }
 
-      showMessage('Verificando código...', 'info');
-      await new Promise(resolve => setTimeout(resolve, 500));
-
+      // LEER CÓDIGOS DEL ADMIN (desde localStorage global)
       const codesData = localStorage.getItem('dexter_codes_global');
+      
       if (!codesData) {
         showMessage('❌ Código no encontrado o inválido', 'error');
         return;
@@ -1114,6 +1119,7 @@
       let codes = JSON.parse(codesData);
       const codeIndex = codes.findIndex(c => c.code === code);
 
+      // Verificar si el código existe
       if (codeIndex === -1) {
         showMessage('❌ Código no encontrado o inválido', 'error');
         return;
@@ -1121,15 +1127,18 @@
 
       const foundCode = codes[codeIndex];
 
+      // Verificar si ya fue usado
       if (foundCode.used) {
         showMessage('❌ Este código ya fue usado anteriormente', 'error');
         return;
       }
 
+      // ✅ MARCAR CÓDIGO COMO USADO
       codes[codeIndex].used = true;
       codes[codeIndex].usedAt = new Date().toISOString();
       localStorage.setItem('dexter_codes_global', JSON.stringify(codes));
 
+      // Activar acceso
       accessSystem.unlock();
       showMessage('🎉 ¡CÓDIGO ACTIVADO! Acceso permanente desbloqueado', 'success');
       input.value = '';
@@ -1144,4 +1153,7 @@
       div.className = `alert alert-${type}`;
       div.textContent = text;
       div.style.marginTop = '15px';
-    
+    }
+  </script>
+</body>
+</html>
