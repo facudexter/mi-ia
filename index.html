@@ -1098,8 +1098,6 @@
       }
 
       showMessage('Verificando código...', 'info');
-
-      // Simular delay de red
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // Validar formato: debe empezar con DEXTER- y tener al menos 8 caracteres después
@@ -1108,35 +1106,16 @@
         return;
       }
 
-      // LEER CÓDIGOS DEL ADMIN (desde localStorage global)
-      const codesData = localStorage.getItem('dexter_codes_global');
-      
-      if (!codesData) {
-        showMessage('❌ Código no encontrado o inválido', 'error');
-        return;
-      }
-
-      let codes = JSON.parse(codesData);
-      const codeIndex = codes.findIndex(c => c.code === code);
-
-      // Verificar si el código existe
-      if (codeIndex === -1) {
-        showMessage('❌ Código no encontrado o inválido', 'error');
-        return;
-      }
-
-      const foundCode = codes[codeIndex];
-
-      // Verificar si ya fue usado
-      if (foundCode.used) {
+      // Verificar si el código ya fue usado EN ESTE NAVEGADOR
+      const usedCodes = JSON.parse(localStorage.getItem('usedCodes') || '[]');
+      if (usedCodes.includes(code)) {
         showMessage('❌ Este código ya fue usado anteriormente', 'error');
         return;
       }
 
       // ✅ MARCAR CÓDIGO COMO USADO
-      codes[codeIndex].used = true;
-      codes[codeIndex].usedAt = new Date().toISOString();
-      localStorage.setItem('dexter_codes_global', JSON.stringify(codes));
+      usedCodes.push(code);
+      localStorage.setItem('usedCodes', JSON.stringify(usedCodes));
 
       // Activar acceso
       accessSystem.unlock();
