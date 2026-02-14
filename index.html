@@ -966,7 +966,7 @@
 
         <div class="alert alert-info">
           <strong>📧 Después de pagar:</strong><br>
-          Enviá tu comprobante a: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4a2a5a7b1a0a1bcb0a1b6f5f6f784a3a9a5ada8eaa7aba9">[email&#160;protected]</a></strong><br>
+          Enviá tu comprobante a: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="caacaba9bfaeafb2beafb8fbf8f98aada7aba3a6e4a9a5a7">[email&#160;protected]</a></strong><br>
           Te enviaremos tu código de activación único
         </div>
       </div>
@@ -992,7 +992,7 @@
   <div id="chatbaseWrapper" class="blocked"></div>
 
   <!-- SISTEMA DE CONTROL -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ==========================================
     // SISTEMA DE ACCESO
     // ==========================================
@@ -1100,51 +1100,27 @@
       showMessage('Verificando código...', 'info');
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Validar formato: debe empezar con DEXTER- y tener al menos 8 caracteres después
+      // Validar formato
       if (!code.startsWith('DEXTER-') || code.length < 15) {
         showMessage('❌ Formato de código inválido', 'error');
         return;
       }
 
-    // ==========================================
-    // ACTIVAR CÓDIGO - CON VALIDACIÓN GLOBAL
-    // ==========================================
-    async function activateCode() {
-      const input = document.getElementById('activationCode');
-      const code = input.value.trim().toUpperCase();
-
-      if (!code) {
-        showMessage('Por favor ingresá un código', 'error');
-        return;
-      }
-
-      showMessage('Verificando código...', 'info');
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Validar formato: debe empezar con DEXTER- y tener al menos 8 caracteres después
-      if (!code.startsWith('DEXTER-') || code.length < 15) {
-        showMessage('❌ Formato de código inválido', 'error');
-        return;
-      }
-
-      // VERIFICAR EN LA NUBE (API)
+      // VERIFICAR EN LA API
       try {
         const response = await fetch('https://api.jsonbin.io/v3/b/679b4e4bacd3cb34a8c53f1e/latest', {
-          headers: {
-            'X-Master-Key': '$2a$10$vR8JFWz8dQYH9L3KGxJYZeXqYk.PZmZWRHqvGT4R2F3FW1L8K9Y8W'
-          }
+          headers: {'X-Master-Key': '$2a$10$vR8JFWz8dQYH9L3KGxJYZeXqYk.PZmZWRHqvGT4R2F3FW1L8K9Y8W'}
         });
         
         const data = await response.json();
         const usedCodes = data.record.usedCodes || [];
         
-        // Verificar si ya fue usado
         if (usedCodes.includes(code)) {
           showMessage('❌ Este código ya fue usado anteriormente', 'error');
           return;
         }
 
-        // MARCAR COMO USADO EN LA NUBE
+        // MARCAR COMO USADO
         usedCodes.push(code);
         await fetch('https://api.jsonbin.io/v3/b/679b4e4bacd3cb34a8c53f1e', {
           method: 'PUT',
@@ -1155,20 +1131,19 @@
           body: JSON.stringify({ usedCodes })
         });
 
-        // Activar acceso
         accessSystem.unlock();
         showMessage('🎉 ¡CÓDIGO ACTIVADO! Acceso permanente desbloqueado', 'success');
         input.value = '';
         
-        setTimeout(() => {
-          closePaymentModal();
-        }, 2500);
-
+        setTimeout(() => { closePaymentModal(); }, 2500);
       } catch (error) {
-        console.error('Error:', error);
         showMessage('❌ Error de conexión. Intentá de nuevo.', 'error');
       }
     }
-    }
 
-    function 
+    function showMessage(text, type) {
+      const div = document.getElementById('activationMessage');
+      div.className = `alert alert-${type}`;
+      div.textContent = text;
+      div.style.marginTop = '15px';
+    
