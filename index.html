@@ -244,7 +244,7 @@
 
   <div id="chatbase"></div>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     function openModal() {
       document.getElementById('modal').classList.add('active');
     }
@@ -301,15 +301,4 @@
       };
       const script = document.createElement('script');
       script.src = 'https://www.chatbase.co/embed.min.js';
-      script.defer = true;
-      document.body.appendChild(script);
-    }
-
-    // Verificar al cargar
-    if (localStorage.getItem('dexterAccess') === 'true') {
-      updateUI();
-      loadChatbase();
-    }
-  </script>
-</body>
-</html>
+ 
