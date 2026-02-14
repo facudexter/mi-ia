@@ -966,7 +966,7 @@
 
         <div class="alert alert-info">
           <strong>📧 Después de pagar:</strong><br>
-          Enviá tu comprobante a: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89efe8eafcedecf1fdecfbb8bbbac9eee4e8e0e5a7eae6e4">[email&#160;protected]</a></strong><br>
+          Enviá tu comprobante a: <strong>facudexter123@gmail.com</strong><br>
           Te enviaremos tu código de activación único
         </div>
       </div>
@@ -1113,9 +1113,24 @@
         return;
       }
 
-      // ✅ MARCAR CÓDIGO COMO USADO
+      // TAMBIÉN verificar en dexter_codes_global (si existe)
+      const globalCodes = JSON.parse(localStorage.getItem('dexter_codes_global') || '[]');
+      const globalCode = globalCodes.find(c => c.code === code);
+      if (globalCode && globalCode.used) {
+        showMessage('❌ Este código ya fue usado anteriormente', 'error');
+        return;
+      }
+
+      // ✅ MARCAR CÓDIGO COMO USADO en AMBOS lugares
       usedCodes.push(code);
       localStorage.setItem('usedCodes', JSON.stringify(usedCodes));
+
+      // Si el código existe en dexter_codes_global, marcarlo como usado ahí también
+      if (globalCode) {
+        globalCode.used = true;
+        globalCode.usedAt = new Date().toISOString();
+        localStorage.setItem('dexter_codes_global', JSON.stringify(globalCodes));
+      }
 
       // Activar acceso
       accessSystem.unlock();
