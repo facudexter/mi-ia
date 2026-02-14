@@ -966,7 +966,7 @@
 
         <div class="alert alert-info">
           <strong>📧 Después de pagar:</strong><br>
-          Enviá tu comprobante a: <strong>facudexter123@gmail.com</strong><br>
+          Enviá tu comprobante a: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6d0b0c0e1809081519081f5c5f5e2d0a000c0401430e0200">facudexter123@gmail.com</a></strong><br>
           Te enviaremos tu código de activación único
         </div>
       </div>
@@ -992,159 +992,32 @@
   <div id="chatbaseWrapper" class="blocked"></div>
 
   <!-- SISTEMA DE CONTROL -->
+  </script></script>
   <script>
-    // ==========================================
-    // SISTEMA DE ACCESO
-    // ==========================================
-    class AccessSystem {
-      constructor() {
-        this.checkAccess();
-        if (this.unlocked) {
-          this.loadChatbase(); // Cargar si ya está desbloqueado
-        }
-        this.updateUI();
-      }
-
-      checkAccess() {
-        // FORZAR BLOQUEO - solo desbloquear si tiene código válido
-        const hasAccess = localStorage.getItem('dexterAccess');
-        this.unlocked = hasAccess === 'true';
-        
-        // DEBUG: mostrar estado
-        console.log('🔒 Estado de acceso:', this.unlocked ? 'DESBLOQUEADO' : 'BLOQUEADO');
-      }
-
-      saveAccess() {
-        localStorage.setItem('dexterAccess', 'true');
-      }
-
-      unlock() {
-        this.unlocked = true;
-        this.saveAccess();
-        this.loadChatbase(); // Cargar Chatbase
-        this.updateUI();
-      }
-
-      loadChatbase() {
-        const wrapper = document.getElementById('chatbaseWrapper');
-        
-        // Configurar Chatbase
-        window.embeddedChatbotConfig = {
-          chatbotId: "MeRf4eoeo6KhiQbRx41EO",
-          domain: "www.chatbase.co"
-        };
-
-        // Crear y cargar el script
-        const script = document.createElement('script');
-        script.src = 'https://www.chatbase.co/embed.min.js';
-        script.setAttribute('chatbotId', 'MeRf4eoeo6KhiQbRx41EO');
-        script.setAttribute('domain', 'www.chatbase.co');
-        script.defer = true;
-        wrapper.appendChild(script);
-      }
-
-      updateUI() {
-        const badge = document.getElementById('accessBadge');
-        const blocker = document.getElementById('chatBlocker');
-        const chatWrapper = document.getElementById('chatbaseWrapper');
-
-        if (this.unlocked) {
-          // DESBLOQUEADO
-          badge.innerHTML = '✅ ACCESO ACTIVO';
-          badge.className = 'access-badge unlocked';
-          badge.onclick = null;
-          blocker.classList.add('hidden'); // OCULTAR bloqueador
-          chatWrapper.className = 'unlocked';
-        } else {
-          // BLOQUEADO
-          badge.innerHTML = '🔒 CHAT BLOQUEADO';
-          badge.className = 'access-badge';
-          badge.onclick = openPaymentModal;
-          blocker.classList.remove('hidden'); // MOSTRAR bloqueador
-          chatWrapper.className = 'blocked';
-        }
-      }
-    }
-
-    const accessSystem = new AccessSystem();
-
-    // ==========================================
-    // FUNCIONES DEL MODAL
-    // ==========================================
     function openPaymentModal() {
       document.getElementById('paymentModal').classList.add('active');
     }
-
+    
     function closePaymentModal() {
       document.getElementById('paymentModal').classList.remove('active');
     }
-
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert('✅ Copiado: ' + text);
-      });
-    }
-
-    // ==========================================
-    // ACTIVAR CÓDIGO (SIMPLE Y FUNCIONAL)
-    // ==========================================
-    async function activateCode() {
-      const input = document.getElementById('activationCode');
-      const code = input.value.trim().toUpperCase();
-
-      if (!code) {
-        showMessage('Por favor ingresá un código', 'error');
-        return;
-      }
-
-      showMessage('Verificando código...', 'info');
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      if (!code.startsWith('DEXTER-') || code.length < 15) {
-        showMessage('❌ Formato de código inválido', 'error');
-        return;
-      }
-
-      try {
-        // VALIDACIÓN GLOBAL CON API
-        const checkResp = await fetch('https://api.jsonbin.io/v3/b/679b9a45acd3cb34a8c5ae37/latest', {
-          headers: {'X-Master-Key': '$2a$10$OTvJfMZnIIwYb8PX.zZ7PuJ8kF0QN.kJ3pF5kR7dJ9gE2lL6mH8yW'}
-        });
-        
-        const checkData = await checkResp.json();
-        const usedCodes = checkData.record.usedCodes || [];
-        
-        if (usedCodes.includes(code)) {
-          showMessage('❌ Este código ya fue usado anteriormente', 'error');
-          return;
-        }
-
-        // MARCAR COMO USADO GLOBALMENTE
-        usedCodes.push(code);
-        await fetch('https://api.jsonbin.io/v3/b/679b9a45acd3cb34a8c5ae37', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': '$2a$10$OTvJfMZnIIwYb8PX.zZ7PuJ8kF0QN.kJ3pF5kR7dJ9gE2lL6mH8yW'
-          },
-          body: JSON.stringify({ usedCodes })
-        });
-
-        accessSystem.unlock();
-        showMessage('🎉 ¡CÓDIGO ACTIVADO! Acceso permanente desbloqueado', 'success');
-        input.value = '';
-        
-        setTimeout(() => {
-          closePaymentModal();
-        }, 2500);
-      } catch (error) {
-        showMessage('❌ Error de conexión. Intentá de nuevo.', 'error');
-      }
-    }
-
-    function showMessage(text, type) {
-      const div = document.getElementById('activationMessage');
-      div.className = `alert alert-${type}`;
-      div.textContent = text;
-      div.style.marginTop = '15px';
     
+    if (localStorage.getItem('dexterAccess') === 'true') {
+      document.getElementById('accessBadge').innerHTML = '✅ ACCESO ACTIVO';
+      document.getElementById('chatBlocker').style.display = 'none';
+      window.embeddedChatbotConfig = {chatbotId: "MeRf4eoeo6KhiQbRx41EO", domain: "www.chatbase.co"};
+      const s = document.createElement('script');
+      s.src = 'https://www.chatbase.co/embed.min.js';
+      s.defer = true;
+      document.body.appendChild(s);
+    }
+    
+    function activateCode() {
+      const code = document.getElementById('activationCode').value.trim().toUpperCase();
+      if (!code || !code.startsWith('DEXTER-')) { alert('Código inválido'); return; }
+      localStorage.setItem('dexterAccess', 'true');
+      alert('¡Activado! Recarga la página.');
+    }
+  </script>
+</body>
+</html>
