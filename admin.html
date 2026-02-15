@@ -500,6 +500,7 @@
           <td>${usedDate}</td>
           <td>
             ${!code.used ? `<button class="copy-btn" onclick="copyCode('${code.code}')">📋 Copiar</button>` : '-'}
+            <button class="copy-btn" onclick="deleteCode('${code.code}')" style="background: var(--danger-red); margin-left: 5px;">🗑️ Eliminar</button>
           </td>
         `;
         tbody.appendChild(row);
@@ -515,6 +516,26 @@
       navigator.clipboard.writeText(code).then(() => {
         showToast('✅ Código copiado: ' + code, 'success');
       });
+    }
+
+    // DELETE CODE
+    function deleteCode(codeToDelete) {
+      if (!confirm('¿Estás seguro de eliminar este código?\n\n' + codeToDelete + '\n\n⚠️ Una vez eliminado, nadie podrá usarlo (ni siquiera si ya lo tenían).')) {
+        return;
+      }
+
+      // Eliminar del array
+      codes = codes.filter(c => c.code !== codeToDelete);
+      
+      // Guardar en localStorage
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(codes));
+      localStorage.setItem('dexter_codes_global', JSON.stringify(codes));
+
+      // Actualizar UI
+      renderCodesTable();
+      updateStats();
+      
+      showToast('🗑️ Código eliminado: ' + codeToDelete, 'success');
     }
 
     // TOAST
