@@ -966,7 +966,7 @@
 
         <div class="alert alert-info">
           <strong>📧 Después de pagar:</strong><br>
-          Enviá tu comprobante a: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6d0b0c0e1809081519081f5c5f5e2d0a000c0401430e0200">facudexter123@gmail.com</a></strong><br>
+          Enviá tu comprobante a: <strong>facudexter123@gmail.com</strong><br>
           Te enviaremos tu código de activación único
         </div>
       </div>
@@ -1014,10 +1014,4 @@
     
     function activateCode() {
       const code = document.getElementById('activationCode').value.trim().toUpperCase();
-      if (!code || !code.startsWith('DEXTER-')) { alert('Código inválido'); return; }
-      localStorage.setItem('dexterAccess', 'true');
-      alert('¡Activado! Recarga la página.');
-    }
-  </script>
-</body>
-</html>
+      if (!code |
