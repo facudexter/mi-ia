@@ -1040,6 +1040,20 @@
   <!-- CHATBASE (SE CARGA SOLO SI ESTÁ DESBLOQUEADO) -->
   <div id="chatbaseWrapper" class="unlocked"></div>
 
+  <!-- CHATBASE - CARGADO DIRECTAMENTE -->
+  <script>
+    window.embeddedChatbotConfig = {
+      chatbotId: "MeRf4eoeo6KhiQbRx41EO",
+      domain: "www.chatbase.co"
+    }
+  </script>
+  <script 
+    src="https://www.chatbase.co/embed.min.js" 
+    chatbotId="MeRf4eoeo6KhiQbRx41EO" 
+    domain="www.chatbase.co" 
+    defer>
+  </script>
+
   <!-- SISTEMA DE CONTROL -->
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ==========================================
@@ -1048,7 +1062,6 @@
     class AccessSystem {
       constructor() {
         this.unlocked = true; // SIEMPRE desbloqueado - AI Dexter es gratis
-        this.loadChatbase(); // Cargar Chatbase siempre
         this.updateUI();
       }
 
@@ -1059,31 +1072,6 @@
 
       saveAccess() {
         localStorage.setItem('dexterAccess', 'true');
-      }
-
-      unlock() {
-        this.unlocked = true;
-        this.saveAccess();
-        this.loadChatbase(); // Cargar Chatbase
-        this.updateUI();
-      }
-
-      loadChatbase() {
-        const wrapper = document.getElementById('chatbaseWrapper');
-        
-        // Configurar Chatbase
-        window.embeddedChatbotConfig = {
-          chatbotId: "MeRf4eoeo6KhiQbRx41EO",
-          domain: "www.chatbase.co"
-        };
-
-        // Crear y cargar el script
-        const script = document.createElement('script');
-        script.src = 'https://www.chatbase.co/embed.min.js';
-        script.setAttribute('chatbotId', 'MeRf4eoeo6KhiQbRx41EO');
-        script.setAttribute('domain', 'www.chatbase.co');
-        script.defer = true;
-        wrapper.appendChild(script);
       }
 
       updateUI() {
