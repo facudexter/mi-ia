@@ -752,7 +752,7 @@
       Comparaciones técnicas, recomendaciones personalizadas y combos perfectos para tu estilo de juego.
     </p>
     <p style="color: var(--neon-purple); font-size: 1.3rem; font-weight: 600; margin-top: 30px;">
-      🔒 Desbloqueá el acceso y usá el chat cuando quieras, sin límites
+      💜 AI Dexter es 100% gratis - Si te ayuda, podés donarme para mantener el proyecto
     </p>
   </header>
 
@@ -1038,7 +1038,7 @@
   </div>
 
   <!-- CHATBASE (SE CARGA SOLO SI ESTÁ DESBLOQUEADO) -->
-  <div id="chatbaseWrapper" class="blocked"></div>
+  <div id="chatbaseWrapper" class="unlocked"></div>
 
   <!-- SISTEMA DE CONTROL -->
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -1087,24 +1087,13 @@
       }
 
       updateUI() {
-        const badge = document.getElementById('accessBadge');
-        const blocker = document.getElementById('chatBlocker');
         const chatWrapper = document.getElementById('chatbaseWrapper');
-
+        
         if (this.unlocked) {
-          // DESBLOQUEADO
-          badge.innerHTML = '✅ ACCESO ACTIVO';
-          badge.className = 'access-badge unlocked';
-          badge.onclick = null;
-          blocker.classList.add('hidden'); // OCULTAR bloqueador
-          chatWrapper.className = 'unlocked';
-        } else {
-          // BLOQUEADO
-          badge.innerHTML = '🔒 CHAT BLOQUEADO';
-          badge.className = 'access-badge';
-          badge.onclick = openPaymentModal;
-          blocker.classList.remove('hidden'); // MOSTRAR bloqueador
-          chatWrapper.className = 'blocked';
+          // DESBLOQUEADO (siempre)
+          if (chatWrapper) {
+            chatWrapper.className = 'unlocked';
+          }
         }
       }
     }
@@ -1177,4 +1166,3 @@
       div.className = `alert alert-${type}`;
       div.textContent = text;
       div.style.marginTop = '15px';
-    
